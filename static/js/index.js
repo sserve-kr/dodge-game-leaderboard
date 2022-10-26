@@ -24,6 +24,10 @@ class Page {
             let season = window.location.hash;
             this.render(season);
         })
+
+        document.querySelector('nav div button').addEventListener('click', (e) => {
+            window.location.hash = document.querySelector('nav div input').value;
+        })
     }
 
     render(season) {
