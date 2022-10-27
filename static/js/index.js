@@ -26,52 +26,41 @@ scoreManager = {
 class Page {
     initPage() {
         this.render(window.location.hash);
-        // detect hash change
-        window.addEventListener('hashchange', (e) => {
-            let season = window.location.hash;
-            let season_num = season.split('#')[1];
-            this.render(season_num);
-        })
-
-        document.querySelector('nav div button').addEventListener('click', (e) => {
+        document.querySelector('nav div button').addEventListener('click', () => {
             let season_num = document.querySelector('nav div input').value;
             window.location.hash = season_num;
             this.render(season_num);
         })
     }
 
-    render(season) {
-        if (document.querySelector('section.content p.loading')) {
-            document.querySelector('section.content p.loading').remove();
+    setLoadingStatus() {
+        if (document.querySelector('section.content p.no-data')) {
+            document.querySelector('section.content p.no-data').remove();
         }
+        if (document.querySelector('section.content div.scores')) {
+            document.querySelector('section.content div.scores').remove();
+        }
+        if (!(document.querySelector('section.content p.loading'))) {
+            let loading = document.createElement('p');
+            loading.classList.add('loading');
+            loading.innerText = 'Loading...';
+            document.querySelector('section.content').appendChild(loading);
+        }
+    }
+
+    render(season) {
+        this.setLoadingStatus();
         scoreManager.getScore(season).then(data => {
-            if (data.scores.length === 0) {
-                if (document.querySelector('section.content div.scores')) {
-                    document.querySelector('section.content div.scores').remove();
-                }
+            if (data["scores"].length === 0) {
                 let p = document.createElement('p')
                 p.classList.add('no-data');
                 p.innerText = '현재 기록된 점수가 없습니다.';
                 document.querySelector('section.content').appendChild(p);
             } else {
-                if (document.querySelector('section.content div.scores')) {
-                    if (document.querySelector('section.content div.scores div.score')) {
-                        Array.prototype.forEach.call(
-                            document.querySelectorAll('section.content div.scores div.score'),
-                            (el) => {
-                                el.remove();
-                            }
-                        )
-                    }
-                } else {
-                    let div = document.createElement('div');
-                    div.classList.add('scores');
-                    document.querySelector('section.content').appendChild(div);
-                }
-                if (document.querySelector('section.content p.no-data')) {
-                    document.querySelector('section.content p.no-data').remove();
-                }
-                data.scores.forEach(scoreObj => {
+                let div = document.createElement('div');
+                div.classList.add('scores');
+                document.querySelector('section.content').appendChild(div);
+                data["scores"].forEach(scoreObj => {
                     let score_item = document.createElement('div');
                     score_item.classList.add('score');
                     let player_id = document.createElement('div');
@@ -91,6 +80,9 @@ class Page {
                     score_item.appendChild(total);
                     document.querySelector('section.content div.scores').appendChild(score_item);
                 })
+            }
+            if (document.querySelector('section.content p.loading')) {
+                document.querySelector('section.content p.loading').remove();
             }
         })
     }
