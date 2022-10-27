@@ -22,7 +22,7 @@ class Page {
         // detect hash change
         window.addEventListener('hashchange', (e) => {
             let season = window.location.hash;
-            this.render(season);
+            this.render(/#(\d)/.match(season)[1]);
         })
 
         document.querySelector('nav div button').addEventListener('click', (e) => {
