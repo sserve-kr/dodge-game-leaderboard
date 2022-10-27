@@ -134,6 +134,9 @@ section.content div.scores {
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
+
+    width: 100%;
+    padding: 0 20px;
 }
 
 section.content div.scores div.score {
@@ -142,10 +145,27 @@ section.content div.scores div.score {
     justify-content: space-between;
     align-items: center;
 
-    width: fit-content;
+    width: 100%;
     height: fit-content;
 
-    padding: 3px 5px;
+    padding: 8px 15px;
+
+    background-color: #fff;
+
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+section.content div.scores div.score:nth-child(1) {
+    background-color: gold;
+}
+
+section.content div.scores div.score:nth-child(2) {
+    background-color: silver;
+}
+
+section.content div.scores div.score:nth-child(3) {
+    background-color: #cd7f32;
 }
 
 div.score div {
@@ -154,10 +174,15 @@ div.score div {
     justify-content: center;
     align-items: center;
     gap: 5px;
+
+    font-size: 1.1rem;
+    font-weight: bold;
 }
 
 div.score div span {
-    font-weight: bold;
+    font-size: 1.3rem;
+
+    font-weight: bolder;
 }
 
 section.content p.loading {

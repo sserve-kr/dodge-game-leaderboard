@@ -1,15 +1,22 @@
 scoreManager = {
     getScore: function(season) {
         if (season) {
+            if (season.includes("#")) {
+                season = season.split("#")[1];
+            }
+            console.log("Sent with season: "+ season);
             return fetch(`https://game-api.sserve.work/get-score?season=${season}`)
             .then(res => res.json())
             .then(data => {
+                console.log(data);
                 return data;
             })
         } else {
+            console.log("Sent without season");
             return fetch(`https://game-api.sserve.work/get-score`)
             .then(res=>res.json())
             .then(data => {
+                console.log(data);
                 return data;
             })
         }
@@ -18,15 +25,18 @@ scoreManager = {
 
 class Page {
     initPage() {
-        this.render(null);
+        this.render(window.location.hash);
         // detect hash change
         window.addEventListener('hashchange', (e) => {
             let season = window.location.hash;
-            this.render(/#(\d)/.match(season)[1]);
+            let season_num = season.split('#')[1];
+            this.render(season_num);
         })
 
         document.querySelector('nav div button').addEventListener('click', (e) => {
-            window.location.hash = document.querySelector('nav div input').value;
+            let season_num = document.querySelector('nav div input').value;
+            window.location.hash = season_num;
+            this.render(season_num);
         })
     }
 
@@ -65,21 +75,21 @@ class Page {
                     let score_item = document.createElement('div');
                     score_item.classList.add('score');
                     let player_id = document.createElement('div');
-                    player_id.innerHTML = `<p>학번</p><p>${scoreObj.id}</p>`;
+                    player_id.innerHTML = `<p>학번</p><p>${scoreObj["id"]}</p>`;
                     let season = document.createElement('div');
-                    season.innerHTML = `<p><span>${scoreObj.season}</span>시즌 플레이</p>`;
+                    season.innerHTML = `<p><span>${scoreObj["season"]}</span>시즌 플레이</p>`;
                     let time = document.createElement('div');
-                    time.innerHTML = `<p>시간 점수 <span>${scoreObj.time}</span></p>`;
+                    time.innerHTML = `<p>시간 점수 <span>${scoreObj["time"]}</span></p>`;
                     let action = document.createElement('div');
-                    action.innerHTML = `<p>액션 점수 <span>${scoreObj.action}</span></p>`;
+                    action.innerHTML = `<p>액션 점수 <span>${scoreObj["action"]}</span></p>`;
                     let total = document.createElement('div');
-                    total.innerHTML = `<p>총합 <span>${scoreObj.score}</span></p>`;
+                    total.innerHTML = `<p>총합 <span>${scoreObj["score"]}</span></p>`;
                     score_item.appendChild(player_id);
                     score_item.appendChild(season);
                     score_item.appendChild(time);
                     score_item.appendChild(action);
                     score_item.appendChild(total);
-                    document.querySelector('section.content').appendChild(score_item);
+                    document.querySelector('section.content div.scores').appendChild(score_item);
                 })
             }
         })
