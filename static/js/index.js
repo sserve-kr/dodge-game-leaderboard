@@ -54,7 +54,7 @@ class Page {
                         )
                     }
                 } else {
-                    let div = document.createelement('div');
+                    let div = document.createElement('div');
                     div.classList.add('scores');
                     document.querySelector('section.content').appendChild(div);
                 }
